@@ -16,6 +16,7 @@ public class Enemy extends Entity{
 	public void tick() {
 		y += speed;
 		if(y >= Game.HEIGHT) {
+			Game.life--;
 			Game.entities.remove(this);
 			return;
 		}
@@ -24,13 +25,13 @@ public class Enemy extends Entity{
 			Entity e = Game.entities.get(i);
 			if(e instanceof Bullet) {
 				if(Entity.isColidding(this, e)) {
-					Game.entities.remove(e);
 					life--;
+					Game.entities.remove(e);
 					if(life == 0) {
 						Explosion explosion = new Explosion(x, y, 16,16,0,null);
 						Game.entities.add(explosion);
+						Game.score++;
 						Game.entities.remove(this);
-						
 						return;
 					}
 					break;

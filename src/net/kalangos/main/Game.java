@@ -11,10 +11,12 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 import net.kalangos.entities.Entity;
@@ -39,8 +41,18 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	public static List<Entity> entities;
 	public static Spritesheet spritesheet;
 	public static Player player;
-	
+
+	public static int score = 0;
+	public static double life = 100;
+
 	public static EnemySpawn enemySpawn;
+
+	public BufferedImage GAME_BACKGROUND;
+	public BufferedImage GAME_BACKGROUND2;
+
+	public int backY = 0;
+	public int backY2 = 160;
+	public int backSpeed = 1;
 
 	public UI ui;
 
@@ -55,11 +67,17 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		// Inicializando objetos.
 		spritesheet = new Spritesheet("/spritesheet.png");
 		entities = new ArrayList<Entity>();
-		player = new Player(Game.WIDTH/2, Game.HEIGHT-20, 16, 16, 1, spritesheet.getSprite(0, 0, 16, 16));
-		//world = new World("/level1.png");
+		player = new Player(Game.WIDTH / 2, Game.HEIGHT - 20, 16, 16, 1, spritesheet.getSprite(0, 0, 16, 16));
+		// world = new World("/level1.png");
 		ui = new UI();
 		enemySpawn = new EnemySpawn();
-
+		try {
+			GAME_BACKGROUND = ImageIO.read(getClass().getResource("/bg_game.png"));
+			GAME_BACKGROUND2 = ImageIO.read(getClass().getResource("/bg_game.png"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		entities.add(player);
 
 	}
@@ -102,6 +120,14 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			e.tick();
 		}
 		ui.tick();
+		backY -= backSpeed;
+		if (backY + 160 <= 0) {
+			backY = 160;
+		}
+		backY2 -= backSpeed;
+		if (backY2 + 160 <= 0) {
+			backY2 = 160;
+		}
 
 	}
 
@@ -114,10 +140,12 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		Graphics g = image.getGraphics();
 		g.setColor(new Color(0, 0, 0));
 		g.fillRect(0, 0, WIDTH, HEIGHT);
+		g.drawImage(GAME_BACKGROUND, 0, backY, null);
+		g.drawImage(GAME_BACKGROUND2, 0, backY2, null);
 
 		/* Renderiza��o do jogo */
 		// Graphics2D g2 = (Graphics2D) g;
-		//world.render(g);
+		// world.render(g);
 		Collections.sort(entities, Entity.nodeSorter);
 		for (int i = 0; i < entities.size(); i++) {
 			Entity e = entities.get(i);
@@ -164,16 +192,15 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
+		if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 			player.right = true;
 			player.left = false;
-		}
-		else if(e.getKeyCode() == KeyEvent.VK_LEFT) {
+		} else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 			player.left = true;
 			player.right = false;
 		}
-		
-		if(e.getKeyCode() == KeyEvent.VK_SPACE) {
+
+		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 			player.isShooting = true;
 		}
 	}
@@ -181,13 +208,9 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	@Override
 	public void keyReleased(KeyEvent e) {
 		/*
-		if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			player.right = false;
-		}
-		else if(e.getKeyCode() == KeyEvent.VK_LEFT) {
-			player.left = false;
-		}
-		*/
+		 * if(e.getKeyCode() == KeyEvent.VK_RIGHT) { player.right = false; } else
+		 * if(e.getKeyCode() == KeyEvent.VK_LEFT) { player.left = false; }
+		 */
 	}
 
 	@Override

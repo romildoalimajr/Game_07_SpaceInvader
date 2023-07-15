@@ -35,7 +35,7 @@ public class Player extends Entity {
 		
 		if(isShooting) {
 			isShooting = false;
-			int xx = this.getX() + 5;
+			int xx = this.getX() + 7;
 			int yy = this.getY();
 			Bullet bullet = new Bullet(xx, yy, 3, 3, 4, null);
 			Game.entities.add(bullet);
