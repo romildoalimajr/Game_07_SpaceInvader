@@ -172,6 +172,10 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			player.left = true;
 			player.right = false;
 		}
+		
+		if(e.getKeyCode() == KeyEvent.VK_SPACE) {
+			player.isShooting = true;
+		}
 	}
 
 	@Override
