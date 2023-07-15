@@ -39,6 +39,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	public static List<Entity> entities;
 	public static Spritesheet spritesheet;
 	public static Player player;
+	
+	public static EnemySpawn enemySpawn;
 
 	public UI ui;
 
@@ -56,6 +58,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		player = new Player(Game.WIDTH/2, Game.HEIGHT-20, 16, 16, 1, spritesheet.getSprite(0, 0, 16, 16));
 		//world = new World("/level1.png");
 		ui = new UI();
+		enemySpawn = new EnemySpawn();
 
 		entities.add(player);
 
@@ -94,6 +97,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	public void tick() {
 
 		for (int i = 0; i < entities.size(); i++) {
+			enemySpawn.tick();
 			Entity e = entities.get(i);
 			e.tick();
 		}
